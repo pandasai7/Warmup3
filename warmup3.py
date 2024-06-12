@@ -11,10 +11,22 @@ class MyApp(ShowBase):
         self.fighter.reparentTo(self.render)
         self.fighter.setColorScale(1.0, 0.0, 0.0, 1.0)
         self.parent = self.loader.loadModel("./Assets/cube")
-        pusher = CollisionHandlerPusher()
+        
+        self.parentCnode = self.parent.attachNewNode(CollisionNode('pcnode')) #attach collider 'pcnode' to self.parent and name it parentCnode
+        self.parentCnode.node().addSolid(CollisionSphere(0, 0, 0, 1.5)) #make parentCnode collision sphere
+        self.fighterCnode = self.fighter.attachNewNode(CollisionNode('fcnode')) #attach collider 'fcnode' to self.fighter and name it parentCnode
+        self.fighterCnode.node().addSolid(CollisionSphere(0, 0, 0, 1.5)) #make fighterCnode collision sphere
+        self.traverser = CollisionTraverser() #creates traverser to look at all object under a parent
+        self.pusher = CollisionHandlerPusher() #Makes collider pusher to push colliders
+        self.pusher.addCollider(self.fighterCnode, self.fighter) #tells the pusher object what colliders will push
+        self.traverser.addCollider(self.fighterCnode, self.pusher) #tells the traverser to check the fighterCnode collider and how to interact
+        self.cTrav = self.traverser #actually does the act of checking for collisions
+        self.traverser.showCollisions(self.render) #makes a lil red box to show collisions for debugging purposes and passes it to the camera to make it visible
+        self.traverser.traverse(self.render) #makes traverser child of parent camera (self.render)
+        
+        self.fighterCnode.show()
+        self.parentCnode.show()
 
-        traverser = CollisionTraverser('trav')
-        base.cTrav = traverser
 
         x = 0
 
@@ -33,44 +45,44 @@ class MyApp(ShowBase):
                                 #----------COLLISION----------#
 
             #creates a collision solid as collision sphere
-            cs = CollisionSphere(0, 0, 0, 1.4)
+            ##cs = CollisionSphere(0, 0, 0, 1.4)
             
             #creates a node to attach to the collision solid
-            cnodePath = self.placeholder2.attachNewNode(CollisionNode('cnode'))
+            ##cnodePath = self.placeholder2.attachNewNode(CollisionNode('cnode'))
 
             #attaches the node to the solid
-            cnodePath.node().addSolid(cs)
+            ##cnodePath.node().addSolid(cs)
 
             #makes the collisionNode visible for debugging purposes
-            cnodePath.show()
+            ##cnodePath.show()
             
             #CollisionHandler PUSHER - auto pushes object out of walls
-            cnodePath.node().addSolid(cs)
+            ##cnodePath.node().addSolid(cs)
             
-            pusher.addCollider(cnodePath, self.fighter)
-            pusher.addInPattern('fnode-into-cnode')
+            ##pusher.addCollider(cnodePath, self.fighter)
+            ##pusher.addInPattern('fnode-into-cnode')
             
             #traverser
             
-            traverser.addCollider(cnodePath, pusher)
+            ##traverser.addCollider(cnodePath, pusher)
             
             #makes collisions visible
-            traverser.showCollisions(self.render)
+            ##traverser.showCollisions(self.render)
             
             self.parent.instanceTo(self.placeholder2)
             x = x + 0.06
         
         #fighter collider stuffs
-        fs = CollisionSphere(0, 0, 0, 1.0)
-        fnodePath = self.fighter.attachNewNode(CollisionNode('fnode'))
-        fnodePath.node().addSolid(fs)
-        pusher.addCollider(fnodePath, self.fighter)
-        fnodePath.show()
+        ##fs = CollisionSphere(0, 0, 0, 1.0)
+        ##fnodePath = self.fighter.attachNewNode(CollisionNode('fnode'))
+        ##fnodePath.node().addSolid(fs)
+        ##pusher.addCollider(fnodePath, self.fighter)
+        ##fnodePath.show()
 
         #Mouse Control
-        base.disableMouse()
-        base.camera.setPos(0.0, 0.0, 250.0)
-        base.camera.setHpr(0.0, -90.0, 0.0)
+        self.disableMouse()
+        self.camera.setPos(0.0, 0.0, 250.0)
+        self.camera.setHpr(0.0, -90.0, 0.0)
 
         #----------controls----------#
         #quit
