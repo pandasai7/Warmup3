@@ -13,7 +13,7 @@ class MyApp(ShowBase):
         self.parent = self.loader.loadModel("./Assets/cube")
         
         self.parentCnode = self.parent.attachNewNode(CollisionNode('pcnode')) #attach collider 'pcnode' to self.parent and name it parentCnode
-        self.parentCnode.node().addSolid(CollisionSphere(0, 0, 0, 1.5)) #make parentCnode collision sphere
+        self.parentCnode.node().addSolid(CollisionSphere(0, 0, 0, 1.8)) #make parentCnode collision sphere
         self.fighterCnode = self.fighter.attachNewNode(CollisionNode('fcnode')) #attach collider 'fcnode' to self.fighter and name it parentCnode
         self.fighterCnode.node().addSolid(CollisionSphere(0, 0, 0, 1.5)) #make fighterCnode collision sphere
         self.traverser = CollisionTraverser() #creates traverser to look at all object under a parent
@@ -42,42 +42,9 @@ class MyApp(ShowBase):
             blue = 0.6 + random.random() * 0.4
             self.placeholder2.setColorScale(red, green, blue, 1.0)
 
-                                #----------COLLISION----------#
-
-            #creates a collision solid as collision sphere
-            ##cs = CollisionSphere(0, 0, 0, 1.4)
-            
-            #creates a node to attach to the collision solid
-            ##cnodePath = self.placeholder2.attachNewNode(CollisionNode('cnode'))
-
-            #attaches the node to the solid
-            ##cnodePath.node().addSolid(cs)
-
-            #makes the collisionNode visible for debugging purposes
-            ##cnodePath.show()
-            
-            #CollisionHandler PUSHER - auto pushes object out of walls
-            ##cnodePath.node().addSolid(cs)
-            
-            ##pusher.addCollider(cnodePath, self.fighter)
-            ##pusher.addInPattern('fnode-into-cnode')
-            
-            #traverser
-            
-            ##traverser.addCollider(cnodePath, pusher)
-            
-            #makes collisions visible
-            ##traverser.showCollisions(self.render)
             
             self.parent.instanceTo(self.placeholder2)
             x = x + 0.06
-        
-        #fighter collider stuffs
-        ##fs = CollisionSphere(0, 0, 0, 1.0)
-        ##fnodePath = self.fighter.attachNewNode(CollisionNode('fnode'))
-        ##fnodePath.node().addSolid(fs)
-        ##pusher.addCollider(fnodePath, self.fighter)
-        ##fnodePath.show()
 
         #Mouse Control
         self.disableMouse()
